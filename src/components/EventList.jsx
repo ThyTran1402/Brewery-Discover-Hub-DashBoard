@@ -1,54 +1,47 @@
 import React from 'react';
 import './EventList.css';
 
-function EventList({ events }) {
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric'
-    });
-  };
-
-  const formatTime = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true
-    });
-  };
-
-  const getEventTypeIcon = (type) => {
+function EventList({ breweries }) {
+  const getBreweryTypeIcon = (type) => {
     const iconMap = {
-      'concert': '🎵',
-      'sports': '⚽',
-      'theater': '🎭',
-      'comedy': '😂',
-      'festival': '🎪',
-      'family': '👨‍👩‍👧‍👦',
-      'conference': '💼',
-      'classical': '🎼',
-      'dance': '💃',
-      'other': '🎯'
+      'micro': '🍺',
+      'nano': '🍻',
+      'regional': '🏭',
+      'brewpub': '🍽️',
+      'large': '🏪',
+      'planning': '🚧',
+      'contract': '🤝',
+      'proprietor': '👨‍💼',
+      'closed': '🔒',
+      'bar': '🍻',
+      'taproom': '🚰',
+      'other': '🏢'
     };
     return iconMap[type] || iconMap['other'];
   };
 
-  const getPopularityLevel = (score) => {
-    if (score >= 0.8) return { level: 'Hot', emoji: '🔥', color: '#e74c3c' };
-    if (score >= 0.6) return { level: 'Popular', emoji: '⭐', color: '#f39c12' };
-    if (score >= 0.4) return { level: 'Good', emoji: '👍', color: '#27ae60' };
-    return { level: 'Normal', emoji: '👌', color: '#3498db' };
+  const getBreweryStatus = (type) => {
+    const statusMap = {
+      'micro': { level: 'Craft', emoji: '🍺', color: '#f39c12' },
+      'nano': { level: 'Small', emoji: '🍻', color: '#3498db' },
+      'regional': { level: 'Regional', emoji: '🏭', color: '#e74c3c' },
+      'brewpub': { level: 'Brewpub', emoji: '🍽️', color: '#27ae60' },
+      'large': { level: 'Large', emoji: '🏪', color: '#8e44ad' },
+      'planning': { level: 'Planning', emoji: '🚧', color: '#f1c40f' },
+      'contract': { level: 'Contract', emoji: '🤝', color: '#34495e' },
+      'proprietor': { level: 'Proprietor', emoji: '👨‍💼', color: '#16a085' },
+      'closed': { level: 'Closed', emoji: '🔒', color: '#95a5a6' },
+      'bar': { level: 'Bar', emoji: '🍻', color: '#e67e22' },
+      'taproom': { level: 'Taproom', emoji: '🚰', color: '#9b59b6' }
+    };
+    return statusMap[type] || { level: 'Other', emoji: '🏢', color: '#7f8c8d' };
   };
 
-  if (events.length === 0) {
+  if (breweries.length === 0) {
     return (
       <div className="event-list">
         <div className="no-events">
-          <h3>🔍 No events found</h3>
+          <h3>🔍 No breweries found</h3>
           <p>Try adjusting your search or filter criteria</p>
         </div>
       </div>
@@ -58,97 +51,94 @@ function EventList({ events }) {
   return (
     <div className="event-list">
       <div className="event-list-header">
-        <h2>🎫 Events ({events.length})</h2>
-        <p>Discover amazing live experiences</p>
+        <h2>🍺 Breweries ({breweries.length})</h2>
+        <p>Discover amazing craft breweries and brewpubs</p>
       </div>
       
       <div className="events-grid">
-        {events.map((event) => {
-          const popularity = getPopularityLevel(event.score);
+        {breweries.map((brewery) => {
+          const status = getBreweryStatus(brewery.brewery_type);
           
           return (
-            <div key={event.id} className="event-card">
-              {/* Event Image and Overlay Info */}
+            <div key={brewery.id} className="event-card">
+              {/* Brewery Image and Overlay Info */}
               <div className="event-image-container">
-                {event.performers && event.performers[0] && event.performers[0].image && (
-                  <img 
-                    src={event.performers[0].image} 
-                    alt={event.title}
-                    className="event-image"
-                  />
-                )}
+                <div className="brewery-placeholder">
+                  <div className="brewery-icon">🍺</div>
+                  <div className="brewery-name-overlay">{brewery.name}</div>
+                </div>
                 <div className="event-overlay">
                   <div className="event-type">
-                    {getEventTypeIcon(event.type)} {event.type.replace(/_/g, ' ').toUpperCase()}
+                    {getBreweryTypeIcon(brewery.brewery_type)} {brewery.brewery_type.replace(/_/g, ' ').toUpperCase()}
                   </div>
                   <div 
                     className="popularity-badge"
-                    style={{ backgroundColor: popularity.color }}
+                    style={{ backgroundColor: status.color }}
                   >
-                    {popularity.emoji} {popularity.level}
+                    {status.emoji} {status.level}
                   </div>
                 </div>
               </div>
 
-              {/* Event Content */}
+              {/* Brewery Content */}
               <div className="event-content">
-                <h3 className="event-title">{event.title}</h3>
+                <h3 className="event-title">{brewery.name}</h3>
                 
-                {/* Feature 1: Date and Time Info */}
-                <div className="event-feature">
-                  <span className="feature-icon">📅</span>
-                  <div className="feature-content">
-                    <span className="feature-label">Date & Time</span>
-                    <span className="feature-value">
-                      {formatDate(event.datetime_local)} at {formatTime(event.datetime_local)}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Feature 2: Venue Information */}
+                {/* Feature 1: Location Information */}
                 <div className="event-feature">
                   <span className="feature-icon">📍</span>
                   <div className="feature-content">
-                    <span className="feature-label">Venue</span>
+                    <span className="feature-label">Location</span>
                     <span className="feature-value">
-                      {event.venue.name} • {event.venue.city}, {event.venue.state}
+                      {brewery.city}, {brewery.state_province}
                     </span>
                   </div>
                 </div>
 
-                {/* Feature 3: Pricing Information */}
+                {/* Feature 2: Address Information */}
                 <div className="event-feature">
-                  <span className="feature-icon">💰</span>
+                  <span className="feature-icon">🏠</span>
                   <div className="feature-content">
-                    <span className="feature-label">Price Range</span>
+                    <span className="feature-label">Address</span>
                     <span className="feature-value">
-                      {event.stats && event.stats.lowest_price 
-                        ? `$${event.stats.lowest_price} - $${event.stats.highest_price || 'VIP'}`
-                        : 'Price TBA'
-                      }
+                      {brewery.address_1 || 'Address not available'}
                     </span>
                   </div>
                 </div>
 
-                {/* Feature 4: Availability Status */}
+                {/* Feature 3: Website Information */}
                 <div className="event-feature">
-                  <span className="feature-icon">🎟️</span>
+                  <span className="feature-icon">🌐</span>
                   <div className="feature-content">
-                    <span className="feature-label">Availability</span>
+                    <span className="feature-label">Website</span>
                     <span className="feature-value">
-                      {event.stats && event.stats.listing_count 
-                        ? `${event.stats.listing_count} listings available`
-                        : 'Check availability'
-                      }
+                      {brewery.website_url ? (
+                        <a href={brewery.website_url} target="_blank" rel="noopener noreferrer">
+                          Visit Website
+                        </a>
+                      ) : (
+                        'No website listed'
+                      )}
                     </span>
                   </div>
                 </div>
 
-                {/* Event Score and Action */}
+                {/* Feature 4: Phone Information */}
+                <div className="event-feature">
+                  <span className="feature-icon">📞</span>
+                  <div className="feature-content">
+                    <span className="feature-label">Phone</span>
+                    <span className="feature-value">
+                      {brewery.phone || 'Phone not available'}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Brewery Type and Action */}
                 <div className="event-footer">
                   <div className="event-score">
-                    <span className="score-label">Score:</span>
-                    <span className="score-value">{(event.score * 100).toFixed(0)}%</span>
+                    <span className="score-label">Type:</span>
+                    <span className="score-value">{brewery.brewery_type}</span>
                   </div>
                   <button className="view-event-btn">
                     View Details

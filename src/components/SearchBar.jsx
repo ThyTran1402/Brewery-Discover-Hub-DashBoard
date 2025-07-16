@@ -8,7 +8,7 @@ function SearchBar({ searchTerm, onSearchChange }) {
         <span className="search-icon">🔍</span>
         <input
           type="text"
-          placeholder="Search events, venues, or cities..."
+          placeholder="Search breweries, cities, or states..."
           value={searchTerm}
           onChange={(e) => onSearchChange(e.target.value)}
           className="search-input"

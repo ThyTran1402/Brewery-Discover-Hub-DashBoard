@@ -1,15 +1,15 @@
 import React from 'react';
 import './CategoryFilter.css';
 
-function CategoryFilter({ events, selectedCategory, onCategoryChange }) {
-  // Get unique event types from the data
-  const eventTypes = events.reduce((acc, event) => {
-    acc[event.type] = (acc[event.type] || 0) + 1;
+function CategoryFilter({ breweries, selectedCategory, onCategoryChange }) {
+  // Get unique brewery types from the data
+  const breweryTypes = breweries.reduce((acc, brewery) => {
+    acc[brewery.brewery_type] = (acc[brewery.brewery_type] || 0) + 1;
     return acc;
   }, {});
 
   // Sort categories by count (most popular first)
-  const sortedCategories = Object.entries(eventTypes)
+  const sortedCategories = Object.entries(breweryTypes)
     .sort(([,a], [,b]) => b - a)
     .slice(0, 8); // Show top 8 categories
 
@@ -21,16 +21,18 @@ function CategoryFilter({ events, selectedCategory, onCategoryChange }) {
 
   const getCategoryIcon = (category) => {
     const iconMap = {
-      'concert': '🎵',
-      'sports': '⚽',
-      'theater': '🎭',
-      'comedy': '😂',
-      'festival': '🎪',
-      'family': '👨‍👩‍👧‍👦',
-      'conference': '💼',
-      'classical': '🎼',
-      'dance': '💃',
-      'other': '🎯'
+      'micro': '🍺',
+      'nano': '🍻',
+      'regional': '🏭',
+      'brewpub': '🍽️',
+      'large': '🏪',
+      'planning': '🚧',
+      'contract': '🤝',
+      'proprietor': '👨‍💼',
+      'closed': '🔒',
+      'bar': '🍻',
+      'taproom': '🚰',
+      'other': '🏢'
     };
     
     return iconMap[category] || iconMap['other'];
@@ -48,7 +50,7 @@ function CategoryFilter({ events, selectedCategory, onCategoryChange }) {
         onChange={(e) => onCategoryChange(e.target.value)}
         className="category-select"
       >
-        <option value="all">All Categories ({events.length})</option>
+        <option value="all">All Types ({breweries.length})</option>
         {sortedCategories.map(([category, count]) => (
           <option key={category} value={category}>
             {getCategoryIcon(category)} {formatCategoryName(category)} ({count})

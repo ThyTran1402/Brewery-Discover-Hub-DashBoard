@@ -1,76 +1,67 @@
 import React from 'react';
 import './Statistics.css';
 
-function Statistics({ events, filteredEvents }) {
+function Statistics({ breweries, filteredBreweries }) {
   // Calculate various statistics
-  const totalEvents = events.length;
-  const filteredCount = filteredEvents.length;
+  const totalBreweries = breweries.length;
+  const filteredCount = filteredBreweries.length;
   
-  // Calculate average score
-  const averageScore = events.length > 0 
-    ? (events.reduce((sum, event) => sum + event.score, 0) / events.length).toFixed(1)
-    : 0;
-  
-  // Find most popular event type
-  const eventTypes = events.reduce((acc, event) => {
-    acc[event.type] = (acc[event.type] || 0) + 1;
+  // Find most popular brewery type
+  const breweryTypes = breweries.reduce((acc, brewery) => {
+    acc[brewery.brewery_type] = (acc[brewery.brewery_type] || 0) + 1;
     return acc;
   }, {});
   
-  const mostPopularType = Object.keys(eventTypes).reduce((a, b) => 
-    eventTypes[a] > eventTypes[b] ? a : b, ''
+  const mostPopularType = Object.keys(breweryTypes).reduce((a, b) => 
+    breweryTypes[a] > breweryTypes[b] ? a : b, ''
   );
   
-  // Calculate average price (from lowest available ticket)
-  const pricesWithTickets = events
-    .filter(event => event.stats && event.stats.lowest_price)
-    .map(event => event.stats.lowest_price);
-  
-  const averagePrice = pricesWithTickets.length > 0
-    ? Math.round(pricesWithTickets.reduce((sum, price) => sum + price, 0) / pricesWithTickets.length)
-    : 0;
-  
   // Count unique cities
-  const uniqueCities = new Set(events.map(event => event.venue.city));
+  const uniqueCities = new Set(breweries.map(brewery => brewery.city));
   const totalCities = uniqueCities.size;
   
-  // Calculate score range
-  const scores = events.map(event => event.score);
-  const highestScore = scores.length > 0 ? Math.max(...scores).toFixed(1) : 0;
-  const lowestScore = scores.length > 0 ? Math.min(...scores).toFixed(1) : 0;
+  // Count unique states
+  const uniqueStates = new Set(breweries.map(brewery => brewery.state_province));
+  const totalStates = uniqueStates.size;
+  
+  // Calculate breweries with websites
+  const breweriesWithWebsites = breweries.filter(brewery => brewery.website_url);
+  const websitePercentage = totalBreweries > 0 
+    ? Math.round((breweriesWithWebsites.length / totalBreweries) * 100)
+    : 0;
+  
+  // Calculate breweries with phone numbers
+  const breweriesWithPhones = breweries.filter(brewery => brewery.phone);
+  const phonePercentage = totalBreweries > 0 
+    ? Math.round((breweriesWithPhones.length / totalBreweries) * 100)
+    : 0;
+  
+  // Find most popular state
+  const stateCounts = breweries.reduce((acc, brewery) => {
+    acc[brewery.state_province] = (acc[brewery.state_province] || 0) + 1;
+    return acc;
+  }, {});
+  
+  const mostPopularState = Object.keys(stateCounts).reduce((a, b) => 
+    stateCounts[a] > stateCounts[b] ? a : b, ''
+  );
 
   const stats = [
     {
       id: 'total',
-      title: 'Total Events',
-      value: totalEvents,
+      title: 'Total Breweries',
+      value: totalBreweries,
       subtitle: `${filteredCount} shown`,
-      icon: '🎫',
+      icon: '🍺',
       color: '#667eea'
     },
     {
-      id: 'score',
-      title: 'Average Score',
-      value: averageScore,
-      subtitle: `Range: ${lowestScore} - ${highestScore}`,
-      icon: '⭐',
-      color: '#f093fb'
-    },
-    {
       id: 'popular',
-      title: 'Most Popular',
+      title: 'Most Popular Type',
       value: mostPopularType.replace(/_/g, ' ').toUpperCase(),
-      subtitle: `${eventTypes[mostPopularType] || 0} events`,
+      subtitle: `${breweryTypes[mostPopularType] || 0} breweries`,
       icon: '🔥',
       color: '#4facfe'
-    },
-    {
-      id: 'price',
-      title: 'Avg Price',
-      value: averagePrice > 0 ? `$${averagePrice}` : 'N/A',
-      subtitle: `${pricesWithTickets.length} events priced`,
-      icon: '💰',
-      color: '#43e97b'
     },
     {
       id: 'cities',
@@ -81,18 +72,34 @@ function Statistics({ events, filteredEvents }) {
       color: '#fa709a'
     },
     {
-      id: 'availability',
-      title: 'Available',
-      value: `${Math.round((pricesWithTickets.length / totalEvents) * 100)}%`,
-      subtitle: 'Events with tickets',
-      icon: '🎟️',
+      id: 'states',
+      title: 'States',
+      value: totalStates,
+      subtitle: mostPopularState ? `${mostPopularState} leads` : 'Coverage',
+      icon: '🗺️',
+      color: '#43e97b'
+    },
+    {
+      id: 'websites',
+      title: 'Online Presence',
+      value: `${websitePercentage}%`,
+      subtitle: 'Have websites',
+      icon: '🌐',
+      color: '#f093fb'
+    },
+    {
+      id: 'contact',
+      title: 'Contactable',
+      value: `${phonePercentage}%`,
+      subtitle: 'Have phone numbers',
+      icon: '📞',
       color: '#ffecd2'
     }
   ];
 
   return (
     <div className="statistics">
-      <h2 className="statistics-title">📊 Event Insights</h2>
+      <h2 className="statistics-title">📊 Brewery Insights</h2>
       <div className="stats-grid">
         {stats.map(stat => (
           <div 

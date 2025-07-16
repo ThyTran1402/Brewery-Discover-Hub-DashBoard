@@ -1,27 +1,27 @@
-# 🎫 SeatGeek Events Dashboard
+# 🍺 Open Brewery DB Dashboard
 
-A beautiful, interactive data dashboard showcasing live events using the SeatGeek API. This React application provides an at-a-glance summary of event information with powerful search and filtering capabilities.
+A beautiful, interactive data dashboard showcasing breweries and brewpubs using the Open Brewery DB API. This React application provides an at-a-glance summary of brewery information with powerful search and filtering capabilities.
 
 ## ✨ Features
 
 ### 📊 Rich Data Visualization
-- **6 Summary Statistics**: Total events, average score, most popular category, average price, unique cities, and availability percentage
+- **6 Summary Statistics**: Total breweries, most popular type, unique cities, states coverage, online presence, and contact information
 - **Real-time Updates**: Statistics dynamically update based on search and filter criteria
-- **Visual Insights**: Color-coded popularity levels and interactive stat cards
+- **Visual Insights**: Color-coded brewery types and interactive stat cards
 
 ### 🔍 Advanced Search & Filtering
-- **Smart Search**: Search by event title, venue name, or city
+- **Smart Search**: Search by brewery name, city, or state
 - **Dynamic Results**: Live filtering as you type
-- **Category Filter**: Filter events by type (concerts, sports, theater, etc.)
+- **Category Filter**: Filter breweries by type (micro, brewpub, regional, etc.)
 - **Multiple Attributes**: Search and filter work independently for refined results
 
-### 🎯 Event Display
-- **Rich Event Cards**: Each event shows 4+ key features:
-  - 📅 Date and time information
-  - 📍 Venue and location details
-  - 💰 Pricing information
-  - 🎟️ Availability status
-- **Visual Appeal**: Event images, popularity badges, and category icons
+### 🎯 Brewery Display
+- **Rich Brewery Cards**: Each brewery shows 4+ key features:
+  - 📍 Location information
+  - 🏠 Address details
+  - 🌐 Website links
+  - 📞 Contact information
+- **Visual Appeal**: Brewery type badges, status indicators, and category icons
 - **Responsive Design**: Works beautifully on all devices
 
 ### 🛠 Technical Features
@@ -55,17 +55,17 @@ A beautiful, interactive data dashboard showcasing live events using the SeatGee
 
 ## 📈 What You'll Discover
 
-The dashboard tells the story of live entertainment through data:
+The dashboard tells the story of craft brewing through data:
 
-- **Event Popularity**: See which events are trending with our scoring system
-- **Geographic Distribution**: Discover events across different cities
-- **Price Insights**: Understand ticket pricing patterns
-- **Category Trends**: Explore what types of events are most popular
-- **Availability**: Track ticket availability across events
+- **Brewery Types**: Explore different types of breweries (micro, brewpub, regional, etc.)
+- **Geographic Distribution**: Discover breweries across different cities and states
+- **Business Insights**: Understand brewery business models and operations
+- **Industry Trends**: See what types of breweries are most popular
+- **Accessibility**: Track which breweries have online presence and contact information
 
 ## 🎨 Design Philosophy
 
-- **Data-Driven Stories**: Each statistic reveals insights about the entertainment industry
+- **Data-Driven Stories**: Each statistic reveals insights about the craft brewing industry
 - **User-Centric**: Intuitive search and filtering for easy exploration
 - **Visual Hierarchy**: Clear information architecture guides user attention
 - **Performance**: Efficient rendering of large datasets
@@ -81,26 +81,27 @@ The dashboard adapts seamlessly to:
 ## 🔧 Built With
 
 - **React 18** - Modern UI library
-- **SeatGeek API** - Real event data
+- **Open Brewery DB API** - Real brewery data
 - **CSS3** - Advanced styling with gradients and animations
 - **Responsive Grid** - Flexible layouts
 
 ## 📊 Data Source
 
-This dashboard uses the [SeatGeek API](https://platform.seatgeek.com/) which provides access to nearly 100,000 live events including:
-- 🎵 Concerts and music festivals
-- ⚽ Sports events
-- 🎭 Theater and comedy shows
-- 🎪 Family events and more
+This dashboard uses the [Open Brewery DB API](https://www.openbrewerydb.org/) which provides access to over 8,000 breweries including:
+- 🍺 Microbreweries and craft breweries
+- 🍽️ Brewpubs and beer-focused restaurants
+- 🏭 Regional brewery locations
+- 🍻 Taprooms and beer bars
 
 ## 🌟 Future Enhancements
 
 Potential improvements could include:
-- Event detail modal windows
-- Favorite events functionality
-- Date range filtering
-- Map integration
-- Social sharing features
+- Brewery detail modal windows
+- Favorite breweries functionality
+- Distance-based filtering
+- Map integration with brewery locations
+- Brewery reviews and ratings
+- Beer style information
 
 ---
 
