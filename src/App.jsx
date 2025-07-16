@@ -4,14 +4,25 @@ import EventList from './components/EventList.jsx';
 import Statistics from './components/Statistics.jsx';
 import SearchBar from './components/SearchBar.jsx';
 import CategoryFilter from './components/CategoryFilter.jsx';
+import UserPreferences from './components/UserPreferences.jsx';
 
 function App() {
   const [breweries, setBreweries] = useState([]);
   const [filteredBreweries, setFilteredBreweries] = useState([]);
+  const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [favorites, setFavorites] = useState([]);
+  const [ratings, setRatings] = useState({});
+  const [userPreferences, setUserPreferences] = useState({
+    preferredTypes: ['micro', 'brewpub'],
+    preferredStates: [],
+    minRating: 0,
+    maxDistance: 50
+  });
+  const [activeTab, setActiveTab] = useState('all'); // 'all', 'recommendations', 'favorites'
 
   // Fetch breweries from Open Brewery DB API
   useEffect(() => {
@@ -51,6 +62,60 @@ function App() {
     fetchBreweries();
   }, []);
 
+  // Generate personalized recommendations
+  useEffect(() => {
+    if (breweries.length > 0) {
+      const generateRecommendations = () => {
+        let scored = breweries.map(brewery => {
+          let score = 0;
+          
+          // Prefer user's preferred types
+          if (userPreferences.preferredTypes.includes(brewery.brewery_type)) {
+            score += 3;
+          }
+          
+          // Prefer user's preferred states
+          if (userPreferences.preferredStates.includes(brewery.state_province)) {
+            score += 2;
+          }
+          
+          // Boost score for breweries with websites (shows they're active)
+          if (brewery.website_url) {
+            score += 1;
+          }
+          
+          // Boost score for breweries with complete information
+          if (brewery.phone && brewery.address_1) {
+            score += 1;
+          }
+          
+          // Apply user ratings
+          const userRating = ratings[brewery.id] || 0;
+          score += userRating;
+          
+          // Penalize if below minimum rating
+          if (userRating < userPreferences.minRating) {
+            score -= 2;
+          }
+          
+          // Add some randomness to avoid always showing the same recommendations
+          score += Math.random() * 0.5;
+          
+          return { ...brewery, recommendationScore: score };
+        });
+        
+        // Sort by recommendation score and get top recommendations
+        const topRecommendations = scored
+          .sort((a, b) => b.recommendationScore - a.recommendationScore)
+          .slice(0, 20);
+        
+        setRecommendations(topRecommendations);
+      };
+      
+      generateRecommendations();
+    }
+  }, [breweries, userPreferences, ratings]);
+
   // Filter breweries based on search term and category
   useEffect(() => {
     let filtered = breweries;
@@ -73,6 +138,35 @@ function App() {
 
     setFilteredBreweries(filtered);
   }, [breweries, searchTerm, selectedCategory]);
+
+  // Favorites management
+  const toggleFavorite = (breweryId) => {
+    setFavorites(prev => 
+      prev.includes(breweryId) 
+        ? prev.filter(id => id !== breweryId)
+        : [...prev, breweryId]
+    );
+  };
+
+  // Rating management
+  const rateBrewery = (breweryId, rating) => {
+    setRatings(prev => ({
+      ...prev,
+      [breweryId]: rating
+    }));
+  };
+
+  // Get breweries to display based on active tab
+  const getDisplayBreweries = () => {
+    switch (activeTab) {
+      case 'recommendations':
+        return recommendations;
+      case 'favorites':
+        return breweries.filter(brewery => favorites.includes(brewery.id));
+      default:
+        return filteredBreweries;
+    }
+  };
 
   if (loading) {
     return (
@@ -99,26 +193,68 @@ function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1>🍺 Open Brewery DB Dashboard</h1>
-        <p>Discover amazing craft breweries, brewpubs, and cideries</p>
+        <h1>🍺 Brewery Recommendation Engine</h1>
+        <p>Discover personalized brewery recommendations based on your preferences</p>
       </header>
 
       <main className="app-main">
-        <Statistics breweries={breweries} filteredBreweries={filteredBreweries} />
+        <Statistics 
+          breweries={breweries} 
+          filteredBreweries={filteredBreweries}
+          recommendations={recommendations}
+          favorites={favorites}
+          ratings={ratings}
+        />
         
-        <div className="controls">
-          <SearchBar 
-            searchTerm={searchTerm} 
-            onSearchChange={setSearchTerm} 
-          />
-          <CategoryFilter 
-            breweries={breweries}
-            selectedCategory={selectedCategory}
-            onCategoryChange={setSelectedCategory}
-          />
+        <UserPreferences 
+          preferences={userPreferences}
+          onPreferencesChange={setUserPreferences}
+          breweries={breweries}
+        />
+        
+        <div className="tab-navigation">
+          <button 
+            className={`tab-button ${activeTab === 'all' ? 'active' : ''}`}
+            onClick={() => setActiveTab('all')}
+          >
+            All Breweries ({filteredBreweries.length})
+          </button>
+          <button 
+            className={`tab-button ${activeTab === 'recommendations' ? 'active' : ''}`}
+            onClick={() => setActiveTab('recommendations')}
+          >
+            Recommendations ({recommendations.length})
+          </button>
+          <button 
+            className={`tab-button ${activeTab === 'favorites' ? 'active' : ''}`}
+            onClick={() => setActiveTab('favorites')}
+          >
+            Favorites ({favorites.length})
+          </button>
         </div>
 
-        <EventList breweries={filteredBreweries} />
+        {activeTab === 'all' && (
+          <div className="controls">
+            <SearchBar 
+              searchTerm={searchTerm} 
+              onSearchChange={setSearchTerm} 
+            />
+            <CategoryFilter 
+              breweries={breweries}
+              selectedCategory={selectedCategory}
+              onCategoryChange={setSelectedCategory}
+            />
+          </div>
+        )}
+
+        <EventList 
+          breweries={getDisplayBreweries()}
+          favorites={favorites}
+          ratings={ratings}
+          onToggleFavorite={toggleFavorite}
+          onRateBrewery={rateBrewery}
+          activeTab={activeTab}
+        />
       </main>
     </div>
   );

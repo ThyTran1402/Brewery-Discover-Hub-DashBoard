@@ -1,10 +1,12 @@
 import React from 'react';
 import './Statistics.css';
 
-function Statistics({ breweries, filteredBreweries }) {
+function Statistics({ breweries, filteredBreweries, recommendations, favorites, ratings }) {
   // Calculate various statistics
   const totalBreweries = breweries.length;
   const filteredCount = filteredBreweries.length;
+  const recommendationCount = recommendations.length;
+  const favoritesCount = favorites.length;
   
   // Find most popular brewery type
   const breweryTypes = breweries.reduce((acc, brewery) => {
@@ -46,6 +48,12 @@ function Statistics({ breweries, filteredBreweries }) {
     stateCounts[a] > stateCounts[b] ? a : b, ''
   );
 
+  // Calculate average user rating
+  const userRatings = Object.values(ratings).filter(rating => rating > 0);
+  const averageRating = userRatings.length > 0 
+    ? (userRatings.reduce((sum, rating) => sum + rating, 0) / userRatings.length).toFixed(1)
+    : 0;
+
   const stats = [
     {
       id: 'total',
@@ -56,44 +64,44 @@ function Statistics({ breweries, filteredBreweries }) {
       color: '#667eea'
     },
     {
+      id: 'recommendations',
+      title: 'Recommendations',
+      value: recommendationCount,
+      subtitle: 'Personalized for you',
+      icon: '🎯',
+      color: '#4facfe'
+    },
+    {
+      id: 'favorites',
+      title: 'Your Favorites',
+      value: favoritesCount,
+      subtitle: 'Saved breweries',
+      icon: '❤️',
+      color: '#e74c3c'
+    },
+    {
+      id: 'ratings',
+      title: 'Avg Rating',
+      value: averageRating > 0 ? `${averageRating}★` : 'No ratings',
+      subtitle: `${userRatings.length} rated`,
+      icon: '⭐',
+      color: '#f39c12'
+    },
+    {
       id: 'popular',
       title: 'Most Popular Type',
       value: mostPopularType.replace(/_/g, ' ').toUpperCase(),
       subtitle: `${breweryTypes[mostPopularType] || 0} breweries`,
       icon: '🔥',
-      color: '#4facfe'
-    },
-    {
-      id: 'cities',
-      title: 'Cities',
-      value: totalCities,
-      subtitle: 'Unique locations',
-      icon: '🏙️',
       color: '#fa709a'
     },
     {
-      id: 'states',
-      title: 'States',
-      value: totalStates,
-      subtitle: mostPopularState ? `${mostPopularState} leads` : 'Coverage',
+      id: 'coverage',
+      title: 'Geographic Coverage',
+      value: `${totalStates} states`,
+      subtitle: `${totalCities} cities`,
       icon: '🗺️',
       color: '#43e97b'
-    },
-    {
-      id: 'websites',
-      title: 'Online Presence',
-      value: `${websitePercentage}%`,
-      subtitle: 'Have websites',
-      icon: '🌐',
-      color: '#f093fb'
-    },
-    {
-      id: 'contact',
-      title: 'Contactable',
-      value: `${phonePercentage}%`,
-      subtitle: 'Have phone numbers',
-      icon: '📞',
-      color: '#ffecd2'
     }
   ];
 

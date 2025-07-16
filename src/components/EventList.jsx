@@ -1,7 +1,7 @@
 import React from 'react';
 import './EventList.css';
 
-function EventList({ breweries }) {
+function EventList({ breweries, favorites, ratings, onToggleFavorite, onRateBrewery, activeTab }) {
   const getBreweryTypeIcon = (type) => {
     const iconMap = {
       'micro': '🍺',
@@ -48,16 +48,31 @@ function EventList({ breweries }) {
     );
   }
 
+  const getTabTitle = () => {
+    switch (activeTab) {
+      case 'recommendations':
+        return { title: '🎯 Personalized Recommendations', subtitle: 'Breweries tailored to your preferences' };
+      case 'favorites':
+        return { title: '❤️ Your Favorite Breweries', subtitle: 'Breweries you\'ve saved for later' };
+      default:
+        return { title: '🍺 All Breweries', subtitle: 'Discover amazing craft breweries and brewpubs' };
+    }
+  };
+
+  const { title, subtitle } = getTabTitle();
+
   return (
     <div className="event-list">
       <div className="event-list-header">
-        <h2>🍺 Breweries ({breweries.length})</h2>
-        <p>Discover amazing craft breweries and brewpubs</p>
+        <h2>{title} ({breweries.length})</h2>
+        <p>{subtitle}</p>
       </div>
       
       <div className="events-grid">
         {breweries.map((brewery) => {
           const status = getBreweryStatus(brewery.brewery_type);
+          const isFavorite = favorites.includes(brewery.id);
+          const userRating = ratings[brewery.id] || 0;
           
           return (
             <div key={brewery.id} className="event-card">
@@ -78,11 +93,45 @@ function EventList({ breweries }) {
                     {status.emoji} {status.level}
                   </div>
                 </div>
+                
+                {/* Favorite Button */}
+                <button 
+                  className={`favorite-btn ${isFavorite ? 'active' : ''}`}
+                  onClick={() => onToggleFavorite(brewery.id)}
+                  title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+                >
+                  {isFavorite ? '❤️' : '🤍'}
+                </button>
               </div>
 
               {/* Brewery Content */}
               <div className="event-content">
-                <h3 className="event-title">{brewery.name}</h3>
+                <div className="brewery-header">
+                  <h3 className="event-title">{brewery.name}</h3>
+                  
+                  {/* Rating System */}
+                  <div className="rating-system">
+                    <div className="rating-display">
+                      {userRating > 0 && (
+                        <span className="current-rating">
+                          {'★'.repeat(userRating)}{'☆'.repeat(5 - userRating)}
+                        </span>
+                      )}
+                    </div>
+                    <div className="rating-buttons">
+                      {[1, 2, 3, 4, 5].map(rating => (
+                        <button
+                          key={rating}
+                          className={`rating-btn ${userRating >= rating ? 'active' : ''}`}
+                          onClick={() => onRateBrewery(brewery.id, rating)}
+                          title={`Rate ${rating} star${rating > 1 ? 's' : ''}`}
+                        >
+                          ★
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
                 
                 {/* Feature 1: Location Information */}
                 <div className="event-feature">
@@ -133,6 +182,19 @@ function EventList({ breweries }) {
                     </span>
                   </div>
                 </div>
+
+                {/* Show recommendation score if in recommendations tab */}
+                {activeTab === 'recommendations' && brewery.recommendationScore && (
+                  <div className="event-feature">
+                    <span className="feature-icon">🎯</span>
+                    <div className="feature-content">
+                      <span className="feature-label">Match Score</span>
+                      <span className="feature-value">
+                        {Math.round(brewery.recommendationScore * 20)}% match
+                      </span>
+                    </div>
+                  </div>
+                )}
 
                 {/* Brewery Type and Action */}
                 <div className="event-footer">
