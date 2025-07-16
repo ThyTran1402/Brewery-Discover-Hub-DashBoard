@@ -1,64 +1,43 @@
-# 🍺 Brewery Discover Hub
+# Web Development Project 5 - *Brewery Discover Hub*
 
-A React-based data dashboard that displays brewery information from the Open Brewery DB API. This interactive dashboard provides summary statistics, search functionality, and filtering capabilities to explore brewery data from around the world.
+Submitted by: **Thy Tran**
 
-## 🌟 Features
+This web app: **A React-based data dashboard that displays brewery information from the Open Brewery DB API. This interactive dashboard provides summary statistics, search functionality, and filtering capabilities to explore brewery data from around the world.**
 
-### Required Features ✅
-- **Dashboard with List View**: Displays at least 10 unique brewery items with 2+ features per row
-- **API Integration**: Fetches data using `useEffect` React hook and `async/await` syntax
-- **Summary Statistics**: Shows 5 key statistics about the brewery data:
-  - Total number of breweries
-  - Most common brewery type
-  - Top location by brewery count
-  - Number of countries represented
-  - Percentage of breweries with websites
-- **Search Functionality**: Dynamic search bar that filters breweries by name, city, or state
-- **Category Filter**: Dropdown filter for brewery types (micro, nano, regional, etc.)
-- **Real-time Updates**: Both search and filter update the display dynamically
+Time spent: **6** hours spent in total
 
-### Additional Features
-- **Responsive Design**: Mobile-friendly layout that adapts to different screen sizes
-- **Modern UI**: Clean, professional interface with hover effects and animations
-- **Color-coded Types**: Different colors for different brewery types
-- **Interactive Elements**: Clickable website links and formatted contact information
-- **Error Handling**: Graceful error states and loading indicators
+## Required Features
 
-## 🛠️ Technologies Used
+The following **required** functionality is completed:
 
-- **React 18.2.0**: Component-based UI library
-- **React Hooks**: useState, useEffect for state management and side effects
-- **CSS3**: Modern styling with Grid, Flexbox, and animations
-- **Open Brewery DB API**: Real-time brewery data source
-- **JavaScript ES6+**: Modern JavaScript features
+- [X] **The site has a dashboard displaying a list of data fetched using an API call**
+  - The dashboard should display at least 10 unique items, one per row
+  - The dashboard includes at least two features in each row
+- [X] **`useEffect` React hook and `async`/`await` are used**
+- [X] **The app dashboard includes at least three summary statistics about the data** 
+  - The app dashboard includes at least three summary statistics about the data, such as:
+    - *insert details here*
+- [X] **A search bar allows the user to search for an item in the fetched data**
+  - The search bar **correctly** filters items in the list, only displaying items matching the search query
+  - The list of results dynamically updates as the user types into the search bar
+- [X] **An additional filter allows the user to restrict displayed items by specified categories**
+  - The filter restricts items in the list using a **different attribute** than the search bar 
+  - The filter **correctly** filters items in the list, only displaying items matching the filter attribute in the dashboard
+  - The dashboard list dynamically updates as the user adjusts the filter
 
-## 🚀 Getting Started
+The following **optional** features are implemented:
 
-### Prerequisites
-- Node.js (v14 or higher)
-- npm or yarn
+- [X] Multiple filters can be applied simultaneously
+- [X] Filters use different input types
+  - e.g., as a text input, a dropdown or radio selection, and/or a slider
+- [X] The user can enter specific bounds for filter values
 
-### Installation
+The following **additional** features are implemented:
 
-1. Clone the repository:
-```bash
-git clone <repository-url>
-cd brewery-dashboard
-```
+* [X] List anything else that you added to improve the site's functionality!
 
-2. Install dependencies:
-```bash
-npm install
-```
 
-3. Start the development server:
-```bash
-npm start
-```
-
-4. Open your browser and navigate to `http://localhost:3000`
-
-## 📊 Data Source
+## Data Source
 
 This project uses the [Open Brewery DB API](https://www.openbrewerydb.org/) to fetch real-time brewery data. The API provides information about:
 - Brewery names and locations
@@ -66,7 +45,7 @@ This project uses the [Open Brewery DB API](https://www.openbrewerydb.org/) to f
 - Contact information (phone, website)
 - Geographic data (city, state, country)
 
-## 🏗️ Project Structure
+## Project Structure
 
 ```
 src/
@@ -85,75 +64,51 @@ src/
 └── index.css                  # Global styles
 ```
 
-## 🎨 UI/UX Features
+## Video Walkthrough
 
-- **Gradient Header**: Eye-catching header with brewery emoji
-- **Card-based Layout**: Clean card design for each brewery
-- **Hover Effects**: Interactive feedback on hover
-- **Color Coding**: Different colors for different brewery types
-- **Responsive Grid**: Adapts to different screen sizes
-- **Loading States**: User-friendly loading indicators
-- **No Results State**: Helpful message when no breweries match criteria
+Here's a walkthrough of implemented user stories:
 
-## 🔧 API Integration
+<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
-The app fetches brewery data using modern JavaScript patterns:
+<!-- Replace this with whatever GIF tool you used! -->
+GIF created with ...  
+<!-- Recommended tools:
+[Kap](https://getkap.co/) for macOS
+[ScreenToGif](https://www.screentogif.com/) for Windows
+[peek](https://github.com/phw/peek) for Linux. -->
 
-```javascript
-const fetchBreweries = async () => {
-  try {
-    const response = await fetch('https://api.openbrewerydb.org/v1/breweries?per_page=50');
-    const data = await response.json();
-    setBreweries(data);
-  } catch (error) {
-    setError(error.message);
-  }
-};
-```
+## Notes
 
-## 🧮 Statistics Calculated
+Describe any challenges encountered while building the app.
+- I troubleshoot complex state management with multi-filter logic with 7 different filter states while ensuring they all work together.
+- I ran into trouble with API integration and fetched the API at first, with some of the brewery records having null or missing values for some of the fields 
+- The performance for multi-filters can be slow with large datasets
 
-1. **Total Breweries**: Count of all fetched breweries
-2. **Most Common Type**: Brewery type with highest count
-3. **Top Location**: State/province with most breweries
-4. **Countries**: Number of unique countries represented
-5. **Website Coverage**: Percentage of breweries with websites
+## License
 
-## 🔍 Search & Filter Features
+    Copyright [2025] [Thy Tran made with ❤️]
 
-- **Search Bar**: 
-  - Searches across brewery names, cities, and states
-  - Real-time filtering as user types
-  - Clear button to reset search
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-- **Category Filter**:
-  - Dropdown with all brewery types
-  - Filters independent of search
-  - Shows all types available in dataset
+        http://www.apache.org/licenses/LICENSE-2.0
 
-## 📱 Responsive Design
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 
-The dashboard is fully responsive and includes:
-- Mobile-first CSS approach
-- Flexible grid layouts
-- Optimized touch targets
-- Readable typography at all sizes
 
-## 🚀 Future Enhancements
 
-- [ ] Map integration for brewery locations
-- [ ] Additional sorting options
-- [ ] Detailed brewery view with more information
-- [ ] Export functionality for filtered data
-- [ ] Dark mode toggle
-- [ ] Advanced filtering (by state, country, etc.)
 
-## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
 
-## 🙏 Acknowledgments
 
-- [Open Brewery DB](https://www.openbrewerydb.org/) for providing the API
-- React team for the excellent framework
-- CodePath WEB102 course for the project requirements 
+
+
+
+
+
+
