@@ -104,4 +104,4 @@ Potential improvements could include:
 
 ---
 
-**Built with ❤️ for CodePath WEB102 - Project 5** 
+**Built with ❤️ for CodePath WEB102 - Project 5**
