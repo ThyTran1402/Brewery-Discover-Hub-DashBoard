@@ -233,41 +233,33 @@ function App() {
     }
   ];
 
-  // Fetch events from SeatGeek API with fallback to sample data
+  // Load sample data (using demo data for reliable functionality)
   useEffect(() => {
-    const fetchEvents = async () => {
+    const loadEvents = async () => {
       try {
         setLoading(true);
         
-        // Try to fetch from SeatGeek API first
-        const response = await fetch(
-          'https://api.seatgeek.com/2/events?per_page=50&sort=score.desc'
-        );
+        // For demo purposes, we'll use sample data directly
+        // This ensures the dashboard always works without API dependencies
+        console.log('Loading demo events data...');
         
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
+        // Simulate API delay for realistic loading experience
+        await new Promise(resolve => setTimeout(resolve, 1000));
         
-        const data = await response.json();
-        console.log('API Response:', data);
-        
-        if (data.events && data.events.length > 0) {
-          setEvents(data.events);
-          setFilteredEvents(data.events);
-        } else {
-          throw new Error('No events found in API response');
-        }
-      } catch (err) {
-        console.error('API Error, using sample data:', err);
-        // Use sample data when API fails
         setEvents(sampleEvents);
         setFilteredEvents(sampleEvents);
+        setError(null);
+        
+        console.log('Demo events loaded successfully!');
+      } catch (err) {
+        console.error('Error loading demo data:', err);
+        setError('Failed to load demo data');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchEvents();
+    loadEvents();
   }, []);
 
   // Filter events based on search term and category
@@ -320,6 +312,17 @@ function App() {
       <header className="app-header">
         <h1>🎫 SeatGeek Events Dashboard</h1>
         <p>Discover the hottest live events happening now</p>
+        <div style={{
+          backgroundColor: '#4CAF50',
+          color: 'white',
+          padding: '8px 16px',
+          borderRadius: '20px',
+          fontSize: '0.9rem',
+          marginTop: '10px',
+          display: 'inline-block'
+        }}>
+          ✨ Demo Mode - Showcasing dashboard features with sample data
+        </div>
       </header>
 
       <main className="app-main">
