@@ -1,5 +1,5 @@
 {
-  "name": "brewery-dashboard",
+  "name": "brewery-discover-hub",
   "version": "1.0.0",
   "description": "A React dashboard for exploring brewery data using Open Brewery DB API",
   "main": "src/index.js",

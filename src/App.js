@@ -76,7 +76,7 @@ function App() {
     <div className="App">
       <header className="app-header">
         <div className="container">
-          <h1>🍺 Brewery Dashboard</h1>
+          <h1>🍺 Brewery Discover Hub</h1>
           <p>Explore breweries from around the world with real-time data</p>
         </div>
       </header>

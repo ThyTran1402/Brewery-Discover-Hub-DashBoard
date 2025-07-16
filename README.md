@@ -1,4 +1,4 @@
-# 🍺 Brewery Dashboard
+# 🍺 Brewery Discover Hub
 
 A React-based data dashboard that displays brewery information from the Open Brewery DB API. This interactive dashboard provides summary statistics, search functionality, and filtering capabilities to explore brewery data from around the world.
 
