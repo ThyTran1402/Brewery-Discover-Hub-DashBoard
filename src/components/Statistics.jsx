@@ -1,16 +1,20 @@
 import React from 'react';
 import './Statistics.css';
 
-function Statistics({ breweries }) {
+function Statistics({ breweries, filteredBreweries }) {
   if (!breweries || breweries.length === 0) {
     return null;
   }
 
-  // Calculate statistics
-  const totalBreweries = breweries.length;
+  const allBreweries = breweries;
+  const displayedBreweries = filteredBreweries || breweries;
+
+  // Calculate statistics for all breweries
+  const totalBreweries = allBreweries.length;
+  const filteredCount = displayedBreweries.length;
   
-  // Most common brewery type
-  const typeCount = breweries.reduce((acc, brewery) => {
+  // Most common brewery type in filtered results
+  const typeCount = displayedBreweries.reduce((acc, brewery) => {
     const type = brewery.brewery_type || 'unknown';
     acc[type] = (acc[type] || 0) + 1;
     return acc;
@@ -20,8 +24,8 @@ function Statistics({ breweries }) {
     typeCount[a[0]] > typeCount[b[0]] ? a : b
   );
 
-  // Most common state/province
-  const stateCount = breweries.reduce((acc, brewery) => {
+  // Most common state/province in filtered results
+  const stateCount = displayedBreweries.reduce((acc, brewery) => {
     const state = brewery.state_province || 'unknown';
     acc[state] = (acc[state] || 0) + 1;
     return acc;
@@ -31,8 +35,8 @@ function Statistics({ breweries }) {
     stateCount[a[0]] > stateCount[b[0]] ? a : b
   );
 
-  // Count breweries by country
-  const countryCount = breweries.reduce((acc, brewery) => {
+  // Count breweries by country in filtered results
+  const countryCount = displayedBreweries.reduce((acc, brewery) => {
     const country = brewery.country || 'unknown';
     acc[country] = (acc[country] || 0) + 1;
     return acc;
@@ -40,17 +44,30 @@ function Statistics({ breweries }) {
   
   const totalCountries = Object.keys(countryCount).length;
 
-  // Breweries with websites
-  const breweriesWithWebsite = breweries.filter(brewery => brewery.website_url).length;
-  const websitePercentage = Math.round((breweriesWithWebsite / totalBreweries) * 100);
+  // Breweries with websites in filtered results
+  const breweriesWithWebsite = displayedBreweries.filter(brewery => brewery.website_url).length;
+  const websitePercentage = displayedBreweries.length > 0 ? 
+    Math.round((breweriesWithWebsite / displayedBreweries.length) * 100) : 0;
 
   return (
     <div className="statistics-container">
       <h2>📊 Brewery Statistics</h2>
+      {filteredCount !== totalBreweries && (
+        <div className="filter-info">
+          Showing {filteredCount} of {totalBreweries} breweries
+        </div>
+      )}
       <div className="stats-grid">
         <div className="stat-card">
-          <div className="stat-number">{totalBreweries}</div>
-          <div className="stat-label">Total Breweries</div>
+          <div className="stat-number">{filteredCount}</div>
+          <div className="stat-label">
+            {filteredCount === totalBreweries ? 'Total Breweries' : 'Filtered Results'}
+          </div>
+          {filteredCount !== totalBreweries && (
+            <div className="stat-description">
+              {totalBreweries} total breweries
+            </div>
+          )}
         </div>
         
         <div className="stat-card">
@@ -73,7 +90,7 @@ function Statistics({ breweries }) {
           <div className="stat-number">{totalCountries}</div>
           <div className="stat-label">Countries</div>
           <div className="stat-description">
-            Represented in dataset
+            {filteredCount === totalBreweries ? 'Represented in dataset' : 'In filtered results'}
           </div>
         </div>
         
@@ -81,7 +98,7 @@ function Statistics({ breweries }) {
           <div className="stat-number">{websitePercentage}%</div>
           <div className="stat-label">Have Websites</div>
           <div className="stat-description">
-            {breweriesWithWebsite} of {totalBreweries} breweries
+            {breweriesWithWebsite} of {displayedBreweries.length} breweries
           </div>
         </div>
       </div>
