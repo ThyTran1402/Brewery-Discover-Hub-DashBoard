@@ -1,35 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import EventList from './components/EventList';
-import Statistics from './components/Statistics';
 import SearchBar from './components/SearchBar';
 import CategoryFilter from './components/CategoryFilter';
+import BreweryList from './components/BreweryList';
+import Statistics from './components/Statistics';
 
 function App() {
-  const [events, setEvents] = useState([]);
-  const [filteredEvents, setFilteredEvents] = useState([]);
+  const [breweries, setBreweries] = useState([]);
+  const [filteredBreweries, setFilteredBreweries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedType, setSelectedType] = useState('all');
 
-  // Fetch events from SeatGeek API
+  // Fetch breweries data using useEffect and async/await
   useEffect(() => {
-    const fetchEvents = async () => {
+    const fetchBreweries = async () => {
       try {
         setLoading(true);
-        // Using SeatGeek API - note: you may want to get an API key for production use
-        const response = await fetch(
-          'https://api.seatgeek.com/2/events?per_page=50&sort=score.desc'
-        );
-        
+        const response = await fetch('https://api.openbrewerydb.org/v1/breweries?per_page=50');
         if (!response.ok) {
-          throw new Error('Failed to fetch events');
+          throw new Error('Failed to fetch brewery data');
         }
-        
         const data = await response.json();
-        setEvents(data.events);
-        setFilteredEvents(data.events);
+        setBreweries(data);
+        setFilteredBreweries(data);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -37,77 +32,64 @@ function App() {
       }
     };
 
-    fetchEvents();
+    fetchBreweries();
   }, []);
 
-  // Filter events based on search term and category
+  // Filter breweries based on search term and category
   useEffect(() => {
-    let filtered = events;
+    let filtered = breweries;
 
-    // Filter by search term (event title or venue)
+    // Filter by search term
     if (searchTerm) {
-      filtered = filtered.filter(event => 
-        event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        event.venue.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        event.venue.city.toLowerCase().includes(searchTerm.toLowerCase())
+      filtered = filtered.filter(brewery =>
+        brewery.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        brewery.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        brewery.state_province.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
-    // Filter by category
-    if (selectedCategory !== 'all') {
-      filtered = filtered.filter(event => 
-        event.type === selectedCategory
-      );
+    // Filter by brewery type
+    if (selectedType !== 'all') {
+      filtered = filtered.filter(brewery => brewery.brewery_type === selectedType);
     }
 
-    setFilteredEvents(filtered);
-  }, [events, searchTerm, selectedCategory]);
+    setFilteredBreweries(filtered);
+  }, [breweries, searchTerm, selectedType]);
+
+  const handleSearchChange = (term) => {
+    setSearchTerm(term);
+  };
+
+  const handleTypeChange = (type) => {
+    setSelectedType(type);
+  };
 
   if (loading) {
-    return (
-      <div className="app">
-        <div className="loading">
-          <div className="spinner"></div>
-          <p>Loading amazing events...</p>
-        </div>
-      </div>
-    );
+    return <div className="loading">Loading brewery data...</div>;
   }
 
   if (error) {
-    return (
-      <div className="app">
-        <div className="error">
-          <h2>Oops! Something went wrong</h2>
-          <p>{error}</p>
-        </div>
-      </div>
-    );
+    return <div className="error">Error: {error}</div>;
   }
 
   return (
-    <div className="app">
+    <div className="App">
       <header className="app-header">
-        <h1>🎫 SeatGeek Events Dashboard</h1>
-        <p>Discover the hottest live events happening now</p>
+        <div className="container">
+          <h1>🍺 Brewery Dashboard</h1>
+          <p>Explore breweries from around the world with real-time data</p>
+        </div>
       </header>
 
-      <main className="app-main">
-        <Statistics events={events} filteredEvents={filteredEvents} />
+      <main className="container">
+        <Statistics breweries={breweries} />
         
-        <div className="controls">
-          <SearchBar 
-            searchTerm={searchTerm} 
-            onSearchChange={setSearchTerm} 
-          />
-          <CategoryFilter 
-            events={events}
-            selectedCategory={selectedCategory}
-            onCategoryChange={setSelectedCategory}
-          />
+        <div className="filters-section">
+          <SearchBar onSearchChange={handleSearchChange} />
+          <CategoryFilter onTypeChange={handleTypeChange} selectedType={selectedType} />
         </div>
 
-        <EventList events={filteredEvents} />
+        <BreweryList breweries={filteredBreweries} />
       </main>
     </div>
   );
