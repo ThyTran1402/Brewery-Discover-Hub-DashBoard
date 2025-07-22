@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './BreweryList.css';
 
 function BreweryList({ breweries }) {
@@ -51,7 +52,9 @@ function BreweryList({ breweries }) {
         {breweries.map(brewery => (
           <div key={brewery.id} className="brewery-card">
             <div className="brewery-header">
-              <h3 className="brewery-name">{brewery.name}</h3>
+              <Link to={`/brewery/${brewery.id}`} className="brewery-name-link">
+                <h3 className="brewery-name">{brewery.name}</h3>
+              </Link>
               <span 
                 className="brewery-type-badge"
                 style={{ backgroundColor: getTypeColor(brewery.brewery_type) }}
@@ -97,6 +100,12 @@ function BreweryList({ breweries }) {
                   ID: {brewery.id}
                 </span>
               </div>
+            </div>
+            
+            <div className="brewery-actions">
+              <Link to={`/brewery/${brewery.id}`} className="view-details-btn">
+                View Details →
+              </Link>
             </div>
           </div>
         ))}

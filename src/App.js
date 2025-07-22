@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
+import Sidebar from './components/Sidebar';
+import DetailView from './components/DetailView';
+import DataVisualization from './components/DataVisualization';
 import SearchBar from './components/SearchBar';
 import CategoryFilter from './components/CategoryFilter';
 import StateFilter from './components/StateFilter';
@@ -162,17 +166,21 @@ function App() {
     return <div className="error">Error: {error}</div>;
   }
 
-  return (
-    <div className="App">
-      <header className="app-header">
+  // Dashboard Component (your existing Project 5 functionality)
+  const Dashboard = () => (
+    <div className="dashboard">
+      <header className="dashboard-header">
         <div className="container">
           <h1>🍺 Brewery Discover Hub</h1>
           <p>Explore breweries from around the world with real-time data</p>
         </div>
       </header>
 
-      <main className="container">
+      <main className="dashboard-main">
         <Statistics breweries={breweries} filteredBreweries={filteredBreweries} />
+        
+        {/* New Project 6 Feature: Data Visualizations */}
+        <DataVisualization breweries={breweries} filteredBreweries={filteredBreweries} />
         
         <div className="filters-section">
           <div className="filters-header">
@@ -219,6 +227,18 @@ function App() {
         <BreweryList breweries={filteredBreweries} />
       </main>
     </div>
+  );
+
+  return (
+    <Router>
+      <div className="App">
+        <Sidebar />
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/brewery/:id" element={<DetailView breweries={breweries} />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
