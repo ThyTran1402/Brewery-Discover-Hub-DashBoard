@@ -111,6 +111,48 @@
   color: #4b5563;
 }
 
+/* Project 6 Navigation Links */
+.brewery-name-link {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.2s;
+}
+
+.brewery-name-link:hover {
+  color: #3b82f6;
+}
+
+.brewery-name-link:hover .brewery-name {
+  color: #3b82f6;
+}
+
+.brewery-actions {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+  text-align: center;
+}
+
+.view-details-btn {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background-color: #3b82f6;
+  color: white;
+  text-decoration: none;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  border: 1px solid #3b82f6;
+}
+
+.view-details-btn:hover {
+  background-color: #2563eb;
+  border-color: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+}
+
 @media (max-width: 768px) {
   .brewery-list-container {
     padding: 24px;
