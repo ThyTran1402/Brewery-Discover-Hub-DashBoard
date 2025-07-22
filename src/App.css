@@ -119,47 +119,6 @@
   border-color: #cbd5e1;
 }
 
-/* Dashboard specific styles for Project 6 */
-.dashboard {
-  margin-left: 280px; /* Account for fixed sidebar */
-  min-height: 100vh;
-  background-color: #f9fafb;
-}
-
-.dashboard-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 3rem 0;
-  margin-bottom: 2rem;
-}
-
-.dashboard-header .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
-  text-align: center;
-}
-
-.dashboard-header h1 {
-  font-size: 3rem;
-  font-weight: bold;
-  margin: 0 0 1rem 0;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.dashboard-header p {
-  font-size: 1.25rem;
-  margin: 0;
-  opacity: 0.9;
-}
-
-.dashboard-main {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
-}
-
-/* Responsive design */
 @media (max-width: 768px) {
   .app-header h1 {
     font-size: 2rem;
@@ -191,25 +150,5 @@
   .filter-select {
     padding: 10px 14px;
     padding-right: 36px;
-  }
-
-  .dashboard {
-    margin-left: 0;
-  }
-  
-  .dashboard-header {
-    padding: 2rem 0;
-  }
-  
-  .dashboard-header h1 {
-    font-size: 2rem;
-  }
-  
-  .dashboard-header p {
-    font-size: 1rem;
-  }
-  
-  .dashboard-main {
-    padding: 0 1rem;
   }
 } 
